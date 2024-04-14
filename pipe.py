@@ -83,6 +83,8 @@ class PipePair:
         is_alive() -> bool: 回傳這一對水管是否還需要更新(存在於視窗中)
     """
 
+
+
     def __init__(self):
         # TODO5 讓每次新增的 Pipe_pair 略有不同 !
         """
@@ -99,6 +101,7 @@ class PipePair:
 
         self.pipes = pg.sprite.Group()
         self.pipes.add(pipe_btm), self.pipes.add(pipe_top)
+
 
     @property
     def bottom_pipe(self):
@@ -139,9 +142,20 @@ class Pipes:
         draw(): 將所有水管對畫到視窗中
     """
 
+    #extra things added
+    """
+    TODO3:
+        Attributes:
+            frame (int): 顯示當前處於第幾幀，用於控制水管的生成
+
+    """
+
     def __init__(self):
         self.pipes_counter = 0
         self.pipe_pairs = MyList()
+
+        #extra attributes added
+        self.frame = 0
 
     @property
     def pipes(self):
@@ -170,13 +184,21 @@ class Pipes:
             self.pipe_pairs.pop_top()
             cursor = self.pipe_pairs.peek()
 
-        # TODO3 決定何時新增水管
+        # TODO3 (Done)決定何時新增水管
+        self.frame += 1
+        if self.frame > FPS:
+            self.frame = 1
+        # 每秒新增一個水管
+        if self.frame % FPS == 0 :
+            #self.add_pipe()
+            pass
+
         """
         控制這次更新需不需要新增水管
         呼叫self.add_pipe()即會新增一對水管對
         """
-        # FIXME 取消下行的註解看看不做控制直接新增會發生什麼事
-        # self.add_pipe()
+        # FIXME (Done)取消下行的註解看看不做控制直接新增會發生什麼事
+        #self.add_pipe()
 
     def draw(self, screen: pg.surface):
         cursor = self.pipe_pairs.head

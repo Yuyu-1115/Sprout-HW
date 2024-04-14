@@ -19,6 +19,20 @@ class Bird(pg.sprite.Sprite):
         draw(screen): 將鳥畫到視窗中
     """
 
+    #extra things added
+    """
+    TODO2:
+        Attributes:
+            speed (float): 紀錄當前垂直速度
+    TODO4:
+        Attributes:
+            to_flap (int): 決定這一幀是否要拍動翅膀，每秒拍動約2次(每37/3=約12幀更新一次 -> to_flap == 12 時更新狀態)
+            angular_velocity (float): 角速度，控制鳥的頭的旋轉速度
+            max_degree (float): 鳥在移動時最高/低可以旋轉到幾度
+
+    """
+
+
     images = [image_loader(path, (BIRD_WIDTH, BIRD_HEIGHT)) for path in BIRD_IMG_PATHS]
 
     def __init__(self, position: Tuple[float, float]):
@@ -35,6 +49,10 @@ class Bird(pg.sprite.Sprite):
         self.rect.center = position
         self.rect.left = position[0]
         self.rotation_degree_ = 0
+        
+        #others attributes added
+        self.speed = 0
+        self.to_flap = 0
         return
 
     def get_input(self) -> bool:  # 回傳滑鼠是否按下(True: 按下/False: 沒有按下)
@@ -70,16 +88,38 @@ class Bird(pg.sprite.Sprite):
 
     # 處理鳥的移動
     def move(self):
-        # TODO1 讓鳥鳥動起來
+        # TODO1 (Done)讓鳥鳥動起來
+        acceleration = 0.3
         if self.get_input():  # 當滑鼠點擊時條件為True, 反之為False
-            # TODO2 在接受到 input 時讓鳥有向上的抬升力
-            pass
-        pass
+            # TODO2 (Done)在接受到 input 時讓鳥有向上的抬升力
+            acceleration = -0.3
+        self.speed += acceleration
+        self.y += self.speed
 
     # 處理鳥的圖片設定(實現動畫)
     def update_image(self):
         # TODO4 讓鳥鳥更生動(增加動畫)
-        pass
+
+        #(5pts) 讓鳥(玩家)向上飛時略往上仰，向下墜時略往下看
+        self.rotation_degree = -1.5
+        if self.get_input():
+            self.rotation_degree = 1.5
+
+        
+        #(5pts) 讓鳥(玩家)以合理的速率持續拍動翅膀
+        if self.to_flap == 12:
+            #switch back and forth between different state
+            if self.image_index == 3:
+                self.image_index = 0
+            else:
+                self.image_index += 1
+            self.to_flap = 0
+        else:
+            self.to_flap += 1
+
+
+
+
 
     def update(self):
         self.update_image()
