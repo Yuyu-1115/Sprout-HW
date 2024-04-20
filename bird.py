@@ -53,6 +53,7 @@ class Bird(pg.sprite.Sprite):
         #others attributes added
         self.speed = 0
         self.to_flap = 0
+        self.max_degree = 30.0
         return
 
     def get_input(self) -> bool:  # 回傳滑鼠是否按下(True: 按下/False: 沒有按下)
@@ -75,7 +76,7 @@ class Bird(pg.sprite.Sprite):
     @rotation_degree.setter
     def rotation_degree(self, value: float):
         self.rotation_degree_ = value
-        self.image = pg.transform.rotate(self.image, self.rotation_degree_)
+        self.image = pg.transform.rotate(Bird.images[self.image_index_], self.rotation_degree_)
 
     @property
     def image_index(self):
@@ -101,9 +102,10 @@ class Bird(pg.sprite.Sprite):
         # TODO4 讓鳥鳥更生動(增加動畫)
 
         #(5pts) 讓鳥(玩家)向上飛時略往上仰，向下墜時略往下看
-        self.rotation_degree = -1.5
-        if self.get_input():
-            self.rotation_degree = 1.5
+        if abs(self.rotation_degree) <= self.max_degree:
+            self.rotation_degree -= 3
+            if self.get_input():
+                self.rotation_degree += 3
 
         
         #(5pts) 讓鳥(玩家)以合理的速率持續拍動翅膀

@@ -2,6 +2,7 @@ from typing import Tuple, Literal
 import pygame as pg
 from config import *
 from helper import image_loader, MyList
+import random
 
 
 # a single pipe
@@ -92,8 +93,8 @@ class PipePair:
         """
         # -----------------以下要修改----------------- #
 
-        pipe_gap = 100
-        center = HEIGHT_LIMIT / 2
+        pipe_gap = random.randint(100, 300)
+        center = HEIGHT_LIMIT / 2 + random.randint(-150, 150)
         pipe_top = Pipe((SCREEN_WIDTH, center - (pipe_gap / 2)), "DOWN")
         pipe_btm = Pipe((SCREEN_WIDTH, center + (pipe_gap / 2)), "UP")
 
@@ -147,7 +148,9 @@ class Pipes:
     TODO3:
         Attributes:
             frame (int): 顯示當前處於第幾幀，用於控制水管的生成
-
+    TODO6:
+        Attributes:
+            is_passed (boolean): 當前幀是否有鳥通過水管
     """
 
     def __init__(self):
@@ -156,6 +159,7 @@ class Pipes:
 
         #extra attributes added
         self.frame = 0
+        self.is_passed = False
 
     @property
     def pipes(self):
@@ -173,6 +177,8 @@ class Pipes:
 
     def update(self):
         # 更新所有水管
+        # is_passed 水管是否經過鳥了
+        self.is_passed = False
         cursor = self.pipe_pairs.head
         while cursor != None:
             cursor.data.update()
@@ -183,15 +189,15 @@ class Pipes:
         while cursor != None and not cursor.is_alive():
             self.pipe_pairs.pop_top()
             cursor = self.pipe_pairs.peek()
+            self.is_passed = True
 
         # TODO3 (Done)決定何時新增水管
         self.frame += 1
-        if self.frame > FPS:
+        if self.frame > (FPS):
             self.frame = 1
-        # 每秒新增一個水管
-        if self.frame % FPS == 0 :
-            #self.add_pipe()
-            pass
+        # 每N幀新增一個水管
+        if self.frame % (FPS) == 0 :
+            self.add_pipe()
 
         """
         控制這次更新需不需要新增水管

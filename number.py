@@ -4,7 +4,36 @@ from config import NUMBER_IMG_PATHS, NUMBER_WIDTH, NUMBER_HEIGHT
 from helper import image_loader
 
 
-class Number(pygame.sprite.Sprite):
+class Number_(pygame.sprite.Sprite):
+    imgs = [
+        image_loader(path, (NUMBER_WIDTH, NUMBER_HEIGHT)) for path in NUMBER_IMG_PATHS
+    ]
+
+    @property
+    def number(self):
+        return self.__number
+
+    @number.setter
+    def number(self, value: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]):
+        self.__number = value
+        self.image = Number_.imgs[self.__number]
+
+    def __init__(
+        self,
+        position: Tuple[float, float],
+        init_value: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    ):
+        pygame.sprite.Sprite.__init__(self)
+        self.number = init_value
+        self.rect = self.image.get_rect()
+        self.rect.topleft = position
+
+    def update(self, new_value: Optional[Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]] = -1):
+        if not (new_value == -1 or new_value == self.number):
+            self.number = new_value
+
+
+class Number:
     """
     單一位數的數字物件
 
@@ -15,22 +44,16 @@ class Number(pygame.sprite.Sprite):
         draw(screen): 將數字畫到視窗中
     """
 
-    imgs = [
-        image_loader(path, (NUMBER_WIDTH, NUMBER_HEIGHT)) for path in NUMBER_IMG_PATHS
-    ]
-
-    @property
-    def number(self):
-        return self.number_
-
-    @number.setter
-    def number(self, value: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]):
-        self.number_ = value
-        self.image = Number.imgs[self.number_]
+    #extra things added
+    """
+    TODO6:
+        Attributes:
+            position (Tuple[int, int]): 同consturctor的Args，額外將座標另外儲存，以便調整數字位置
+    """
 
     def __init__(
         self,
-        position: Tuple[float, float],
+        position: Tuple[int, int],
         init_value: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     ):
         """
@@ -40,10 +63,18 @@ class Number(pygame.sprite.Sprite):
             position (Tuple[int, int]): 初始位置 (x, y), x 為數字(圖片)左方的水平位置, y 為數字(圖片)上方的垂直位置
             init_value (0, 1, 2, 3, 4, 5, 6, 7, 8, 9): 初始數字
         """
-        pygame.sprite.Sprite.__init__(self)
-        self.number = init_value
-        self.rect = self.image.get_rect()
-        self.rect.topleft = position
+        self.__number = Number_(position, init_value)
+        self.number_group = pygame.sprite.GroupSingle(self.__number)
+
+        self.position = position
+
+    @property
+    def number(self):
+        return self.__number.number
+
+    @number.setter
+    def number(self, value: Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]):
+        self.__number.number = value
 
     def update(self, new_value: Optional[Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]] = -1):
         """
@@ -52,5 +83,7 @@ class Number(pygame.sprite.Sprite):
         Args:
             new_value (Optional)(0, 1, 2, 3, 4, 5, 6, 7, 8, 9): 欲更新的數字, 留空則不更新
         """
-        if not (new_value == -1 or new_value == self.number):
-            self.number = new_value
+        self.__number.update(new_value)
+
+    def draw(self, screen: pygame.surface):
+        self.number_group.draw(screen)

@@ -39,6 +39,8 @@ class Game:
         bird = pg.sprite.GroupSingle(Bird((SCREEN_WIDTH / 10, HEIGHT_LIMIT / 2)))
         pipes = Pipes()
         scoreboard = Scoreboard()
+        started = False
+
         # game loop
         while running:
             clock.tick(FPS)
@@ -51,7 +53,7 @@ class Game:
             base.update()
             bird.update()
             pipes.update()
-            scoreboard.update()
+            scoreboard.update(pipes.is_passed)
 
             ## 遊戲結束與否
             ### 碰撞發生
@@ -65,3 +67,5 @@ class Game:
             base.draw(self.screen)
             scoreboard.draw(self.screen)
             pg.display.update()
+
+            
