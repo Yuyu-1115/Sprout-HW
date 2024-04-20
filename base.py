@@ -36,7 +36,7 @@ class Base(pg.sprite.Sprite):
         if (self.scroll + BASE_WIDTH < SCREEN_WIDTH):
             self.scroll = 0
         
-        # TODO0 (Done)讓底下綠色的bar動起來
+        # TODO0 (10pts) 讓下方的地基動起來
         """
         hint:   透過在每次update時增加一點base圖片向左的滑動量(設定self.scroll), 可達成視覺上向左動的效果.
                 因為base的圖片並非無限延伸, 在圖片要滑出畫面(self.scroll + BASE_WIDTH < SCREEN_WIDTH)時, 可以把base拉回原位(self.scroll = 0)做修正.

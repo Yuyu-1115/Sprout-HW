@@ -6,8 +6,9 @@ if __name__ == "__main__":
     pg.init()
     pg.display.set_caption(CAPTION)
     screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
+    play_again = True
     game = Game(screen)
-    game.run()
+    while game.run():
+        game = Game(screen)
 
     pg.quit()

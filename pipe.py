@@ -86,15 +86,15 @@ class PipePair:
 
 
 
-    def __init__(self):
+    def __init__(self, score):
         # TODO5 讓每次新增的 Pipe_pair 略有不同 !
         """
         透過 random library 來輔助達成目標
         """
         # -----------------以下要修改----------------- #
 
-        pipe_gap = random.randint(100, 300)
-        center = HEIGHT_LIMIT / 2 + random.randint(-150, 150)
+        pipe_gap = random.randint(max(250 - 30 * (score // 5), 50), max(300 - 30 * score // 5, 100))
+        center = HEIGHT_LIMIT / 2 + random.randint(max(-150 - 20 * (score // 5), -250), min(150 + 20 * (score // 5), 250))
         pipe_top = Pipe((SCREEN_WIDTH, center - (pipe_gap / 2)), "DOWN")
         pipe_btm = Pipe((SCREEN_WIDTH, center + (pipe_gap / 2)), "UP")
 
@@ -143,12 +143,12 @@ class Pipes:
         draw(): 將所有水管對畫到視窗中
     """
 
-    #extra things added
+    # TODO 額外的成員
     """
-    TODO3:
+    _TODO3:
         Attributes:
             frame (int): 顯示當前處於第幾幀，用於控制水管的生成
-    TODO6:
+    _TODO6:
         Attributes:
             is_passed (boolean): 當前幀是否有鳥通過水管
     """
@@ -171,11 +171,11 @@ class Pipes:
             cursor = cursor.nxt
         return re
 
-    def add_pipe(self):
+    def add_pipe(self, score):
         self.pipes_counter += 1
-        self.pipe_pairs.push_back(PipePair())
+        self.pipe_pairs.push_back(PipePair(score))
 
-    def update(self):
+    def update(self, score):
         # 更新所有水管
         # is_passed 水管是否經過鳥了
         self.is_passed = False
@@ -191,20 +191,21 @@ class Pipes:
             cursor = self.pipe_pairs.peek()
             self.is_passed = True
 
-        # TODO3 (Done)決定何時新增水管
+        # TODO3 決定何時新增水管
         self.frame += 1
         if self.frame > (FPS):
             self.frame = 1
         # 每N幀新增一個水管
         if self.frame % (FPS) == 0 :
-            self.add_pipe()
+            self.add_pipe(score)
 
         """
         控制這次更新需不需要新增水管
         呼叫self.add_pipe()即會新增一對水管對
         """
-        # FIXME (Done)取消下行的註解看看不做控制直接新增會發生什麼事
-        #self.add_pipe()
+        # FIXME 取消下行的註解看看不做控制直接新增會發生什麼事
+        # 會從Flappy Bird變成某種管樂器(?)
+        #self.add_pipe(score)
 
     def draw(self, screen: pg.surface):
         cursor = self.pipe_pairs.head
@@ -213,7 +214,7 @@ class Pipes:
             cursor = cursor.nxt
 
 
-# TODO8 過動的水管
+# TODO8 (X)過動的水管
 """
 可以直接修改, 也可以透過繼承 Pipe, PipePair 創造不同行為的水管
 """

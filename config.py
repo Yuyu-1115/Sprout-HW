@@ -28,6 +28,15 @@ BACKGROUND_IMG_PATH = os.path.join(CURRENT_WORKINGDIR_PATH, "img", "background.p
 BASE_IMG_PATH = os.path.join(CURRENT_WORKINGDIR_PATH, "img", "base.png")
 PIPE_IMG_PATH = os.path.join(CURRENT_WORKINGDIR_PATH, "img", "pipe-green.png")
 
+GAMEOVER_IMG_PATH = os.path.join(CURRENT_WORKINGDIR_PATH, "img", "gameover.png")
+RESULT_IMG_PATH = os.path.join(CURRENT_WORKINGDIR_PATH, "img", "result.png")
+FONT_PATH = os.path.join(CURRENT_WORKINGDIR_PATH, "font", "Cubic_11_1.100_R.ttf")
+RESTART_IMAGE_PATH = os.path.join(CURRENT_WORKINGDIR_PATH, "img", "restart.png")
+QUIT_IMAGE_PATH = os.path.join(CURRENT_WORKINGDIR_PATH, "img", "quit.png")
+
+
+
+
 BIRD_IMG_PATHS = (
     os.path.join(CURRENT_WORKINGDIR_PATH, "img", "bluebird-downflap.png"),
     os.path.join(CURRENT_WORKINGDIR_PATH, "img", "bluebird-midflap.png"),
@@ -39,6 +48,8 @@ NUMBER_IMG_PATHS = (
     os.path.join(CURRENT_WORKINGDIR_PATH, "img", "numbers", f"{i}.png")
     for i in range(10)
 )
+
+
 
 # base animation related
 BASE_SCROLLING_SPEED = 5
